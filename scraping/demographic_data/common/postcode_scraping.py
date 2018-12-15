@@ -111,9 +111,9 @@ if __name__ == "__main__":
 
     second_part(city_name, postcode_info)
     '''
-    with open("../data/temp/4-" + city_name + ".json", "r") as read_file:
+    with open("../data/temp/5-" + city_name + ".json", "r") as read_file:
         postcode_info = json.load(read_file)
-    fifth_part(city_name, postcode_info)
+    sixth_part(city_name, postcode_info)
     '''
     #Prepare function dictionary to pass to our parallelizer
     funcs = [second_part, third_part, fourth_part, fifth_part]
