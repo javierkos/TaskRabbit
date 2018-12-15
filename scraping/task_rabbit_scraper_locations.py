@@ -73,7 +73,7 @@ class TaskRabbitScraper:
             self.scraper.clickOnExistingElement(day_buttons[1])
             self.scraper.clickOnExistingElement(day_buttons[-1])
             apply_changes = self.scraper.findElements(["apply_calendar_choice"])[0]
-            self.scraper.clickOnExistingElement(apply_changes)
+            self.scraper.safe_element_click(apply_changes)
 
             self.get_taskers()
 

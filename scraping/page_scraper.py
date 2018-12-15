@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
 
 chrome_options = Options()
 #chrome_options.add_argument("--headless")
@@ -123,6 +124,9 @@ class PageScraper:
 
 	def pageGoBack(self):
 		self.driver.execute_script("window.history.go(-1)")
+
+	def safe_element_click(self, element):
+		webdriver.ActionChains(self.driver).move_to_element(element).click(element).perform()
 
 	def finish(self):
 		self.driver.close()

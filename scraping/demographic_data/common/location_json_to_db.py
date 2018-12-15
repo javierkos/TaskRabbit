@@ -11,7 +11,7 @@ from pathlib import Path
 
 def main(params):
     db_file = Path("../../../databases/" + params["db_name"])
-    city_folder = Path("../" + params["city_folder_name"] + "/data/data.json")
+    city_file = Path("../data/postcode_json/" + params["city_name"] +".json")
 
     #Check db file exists
     if os.path.isfile(db_file.resolve()):
@@ -21,7 +21,7 @@ def main(params):
 
     #Check city folder exists
     try:
-        with open(city_folder.resolve(), 'r') as city_json:
+        with open(city_file.resolve(), 'r') as city_json:
             city_data = json.load(city_json)
     except FileNotFoundError:
         raise FileNotFoundError("City folder does not exist under demographic_data module")
@@ -58,6 +58,6 @@ if __name__ == "__main__":
         #Database name and city folder name within scraping
         params = {
             "db_name": sys.argv[1],
-            "city_folder_name": sys.argv[2],
+            "city_name": sys.argv[2],
         }
         main(params)

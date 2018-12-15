@@ -1,1 +1,1 @@
-DB_NAME = "taskrabbit_los_angeles.db"
+DB_NAME = "taskrabbit_oklahoma.db"
