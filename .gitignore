@@ -68,8 +68,7 @@ analysis/dataframes/*
 analysis/dataframes/new_york/*
 analysis/dataframes/los_angeles/*
 analysis/dataframes/san_francisco/*
-analysis/plots/*
 analysis/image_recon/test_datasets/*
-databases/*
+#databases/*
 scraping/demographic_data/data/*
 

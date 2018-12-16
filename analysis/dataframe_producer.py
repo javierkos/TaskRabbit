@@ -7,7 +7,7 @@ matplotlib.use
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import pickle
-import seaborn as sns
+#import seaborn as sns
 import statistics
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 '''
@@ -15,12 +15,11 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
     1st - name (key) of city
     2nd - name of db
 '''
-if __name__ == '__main__':
-    if len(sys.argv[1:]) == 0:
-        raise Exception("No arguments passed - aborting...")
 
-    conn = sqlite3.connect('../databases/' + sys.argv[2])
-    conn2 = sqlite3.connect('../databases/' + sys.argv[2])
+def produce_dataframes(city_key, db_name, store=True):
+
+    conn = sqlite3.connect('../databases/' + db_name)
+    conn2 = sqlite3.connect('../databases/' + db_name)
 
     c = conn.cursor()
     c2 = conn2.cursor()
@@ -134,6 +133,9 @@ if __name__ == '__main__':
         i += 1
         dfs[service_name] = df
 
-    for service in dfs.keys():
-        with open("dataframes/" + sys.argv[1] + "/" + service + ".pkl", "wb") as output_file:
-            pickle.dump(dfs[service], output_file)
+    if store:
+        for service in dfs.keys():
+            with open("dataframes/" + city_key + "/" + service + ".pkl", "wb") as output_file:
+                pickle.dump(dfs[service], output_file)
+    else:
+        return dfs
