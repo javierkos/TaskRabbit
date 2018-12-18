@@ -11,11 +11,6 @@ class ImageTestService:
         self.service, self.service_endpoint = service, service_endpoints[service]
         self.X = X
 
-    def get_error(self):
-        #lol
-        print ("")
-
-
     def get_accuracy(self, y, pred):
         return sum([1 if val == pred[i] else 0 for i,val in enumerate(y)])/len(y)
 
@@ -32,8 +27,7 @@ class ImageTestService:
     
     def test_slightcorp(self):
         results = []
-        fails = 0
-        i = 0
+        fails, i = 0, 0
         for index, row in self.X.iterrows():
             if i % 25 == 0:
                 print (i)
@@ -60,6 +54,42 @@ class ImageTestService:
         results.append([fails])
         with open("results/slightcorp.json", "w") as write_file:
             json.dump(results, write_file)
+
+    def test_faceplusplus(self):
+        results = []
+        fails = 0
+        i = 0
+        for index, row in self.X.iterrows():
+            if i % 25 == 0:
+                print (i)
+            json_resp = requests.post('https://api-us.faceplusplus.com/facepp/v3/detect',
+                                      data={'api_key': 'p2Xus5m7q7pDON-gris92aU-T14Mqyfs',
+                                            'api_secret': "CnQzPyBY5yKJkkHeEEl4Si-2KNzx7yf0",
+                                            'return_attributes': "gender,age,smiling,ethnicity"},
+                                      files={'image_file': ('filename', open('test_datasets/UTKFace/' + row["f_name"], 'rb'))})
+            json_obj = json.loads(json_resp.text)
+
+            if 'faces' in list(json_obj.keys()):
+                try:
+                    results.append({
+                        "actual_age": row["age"],
+                        "predicted_age": json_obj["faces"][0]["attributes"]["age"]["value"],
+                        "actual_ethnicity": row["race"],
+                        "predicted_ethnicity": json_obj["faces"][0]["attributes"]["ethnicity"]["value"],
+                        "actual_gender": row["gender"],
+                        "predicted_gender": json_obj["faces"][0]["attributes"]["gender"]["value"],
+                        "mood": json_obj["faces"][0]["attributes"]["smile"]["value"]
+                    })
+                except Exception:
+                    fails += 1
+            else:
+                fails += 1
+            i += 1
+        results.append([fails])
+        with open("results/faceplusplus.json", "w") as write_file:
+            json.dump(results, write_file)
+
+
 
 
 

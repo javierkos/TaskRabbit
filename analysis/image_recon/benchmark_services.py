@@ -24,14 +24,23 @@ def store_dataframe():
     with open("test_datasets/UTK_df.pkl", "wb") as df_file:
         pickle.dump(X, df_file)
 
-def test_dataframe():
+def test_slightcorp():
     with open("test_datasets/UTK_df.pkl", "rb") as df_file:
         X = pickle.load(df_file)
     its = ImageTestService("slightcorp_face", X.sample(250))
     its.test_slightcorp()
 
+def test_faceplusplus():
+    with open("test_datasets/UTK_df.pkl", "rb") as df_file:
+        X = pickle.load(df_file)
+    its = ImageTestService("slightcorp_face", X.sample(250))
+    its.test_faceplusplus()
+
 def get_slightcorp_genre(genre_score):
     return "1" if genre_score > 0 else "0"
+
+def get_faceplusplus_genre(genre_score):
+    return "1" if genre_score == "Female" else "0"
 
 def get_slightcorp_ethnicity(ethnicity):
     dct = {
@@ -39,6 +48,15 @@ def get_slightcorp_ethnicity(ethnicity):
         "black": ["1"],
         "asian": ["2"],
         "other": ["3", "4"]
+    }
+    return dct[ethnicity]
+
+def get_faceplusplus_ethnicity(ethnicity):
+    dct = {
+        "WHITE": ["0"],
+        "BLACK": ["1"],
+        "ASIAN": ["2"],
+        "INDIA": ["3", "4"]
     }
     return dct[ethnicity]
 
@@ -57,6 +75,22 @@ def score_slightcorp():
         "ethnicity_score_unfailed": '%1.2f' % (ethnicity_score / len(slightcorp_res[:-1]) * 100),
         "ethnicity_score_with_fails": '%1.2f' % (ethnicity_score / (len(slightcorp_res[:-1]) + int(slightcorp_res[-1][0])) * 100),
     }
+
+def score_faceplusplus():
+    with open("results/faceplusplus.json", "r") as read_file:
+        faceplusplus_res = json.load(read_file)
+    gender_score = sum([1 if person["actual_gender"] == get_faceplusplus_genre(person["predicted_gender"])
+                        else 0 for person in faceplusplus_res[:-1]])
+
+    ethnicity_score = sum([1 if person["actual_ethnicity"] in get_faceplusplus_ethnicity(person["predicted_ethnicity"])
+                        else 0 for person in faceplusplus_res[:-1]])
+
+    return {
+        "gender_score_unfailed": '%1.2f' % (gender_score / len(faceplusplus_res[:-1]) * 100),
+        "gender_score_with_fails": '%1.2f' % (gender_score / (len(faceplusplus_res[:-1]) + int(faceplusplus_res[-1][0])) * 100),
+        "ethnicity_score_unfailed": '%1.2f' % (ethnicity_score / len(faceplusplus_res[:-1]) * 100),
+        "ethnicity_score_with_fails": '%1.2f' % (ethnicity_score / (len(faceplusplus_res[:-1]) + int(faceplusplus_res[-1][0])) * 100),
+    }
     
 
 if __name__ == '__main__':
@@ -64,7 +98,8 @@ if __name__ == '__main__':
     if action == "store":
         store_dataframe()
     elif action == "test":
-        test_dataframe()
+        test_faceplusplus()
     elif action == "score":
-        score_slightcorp()
+        print (score_faceplusplus())
+        print(score_slightcorp())
 
