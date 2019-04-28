@@ -5,6 +5,7 @@ import sys
 import json
 from analysis.image_recon.image_test_service import ImageTestService
 
+
 '''
     Used to either create a dataframe from the datasets of images or call the ImageTestService class.
     Pass 1 additional argument when running script, which is action type:
@@ -27,13 +28,13 @@ def store_dataframe():
 def test_slightcorp():
     with open("test_datasets/UTK_df.pkl", "rb") as df_file:
         X = pickle.load(df_file)
-    its = ImageTestService("slightcorp_face", X.sample(250))
+    its = ImageTestService(X.sample(250))
     its.test_slightcorp()
 
 def test_faceplusplus():
     with open("test_datasets/UTK_df.pkl", "rb") as df_file:
         X = pickle.load(df_file)
-    its = ImageTestService("slightcorp_face", X.sample(250))
+    its = ImageTestService(X.sample(500))
     its.test_faceplusplus()
 
 def get_slightcorp_genre(genre_score):
@@ -60,6 +61,13 @@ def get_faceplusplus_ethnicity(ethnicity):
     }
     return dct[ethnicity]
 
+def mse_age(result_dict):
+    tot = 0
+    for result in result_dict[:-1]:
+        sq = (int(result["actual_age"]) - result["predicted_age"]) ** 2
+        tot += sq
+    return tot/len(result_dict[:-1])
+
 def score_slightcorp():
     with open("results/slightcorp.json", "r") as read_file:
         slightcorp_res = json.load(read_file)
@@ -69,11 +77,14 @@ def score_slightcorp():
     ethnicity_score = sum([1 if person["actual_ethnicity"] in get_slightcorp_ethnicity(person["predicted_ethnicity"])
                         else 0 for person in slightcorp_res[:-1]])
 
+    age_score = mse_age(slightcorp_res)
+
     return {
         "gender_score_unfailed": '%1.2f' % (gender_score / len(slightcorp_res[:-1]) * 100),
         "gender_scoe_with_fails": '%1.2f' % (gender_score / (len(slightcorp_res[:-1]) + int(slightcorp_res[-1][0])) * 100),
         "ethnicity_score_unfailed": '%1.2f' % (ethnicity_score / len(slightcorp_res[:-1]) * 100),
         "ethnicity_score_with_fails": '%1.2f' % (ethnicity_score / (len(slightcorp_res[:-1]) + int(slightcorp_res[-1][0])) * 100),
+        "age_score": '%1.2f' % age_score
     }
 
 def score_faceplusplus():
@@ -85,11 +96,14 @@ def score_faceplusplus():
     ethnicity_score = sum([1 if person["actual_ethnicity"] in get_faceplusplus_ethnicity(person["predicted_ethnicity"])
                         else 0 for person in faceplusplus_res[:-1]])
 
+    age_score = mse_age(faceplusplus_res)
+
     return {
         "gender_score_unfailed": '%1.2f' % (gender_score / len(faceplusplus_res[:-1]) * 100),
         "gender_score_with_fails": '%1.2f' % (gender_score / (len(faceplusplus_res[:-1]) + int(faceplusplus_res[-1][0])) * 100),
         "ethnicity_score_unfailed": '%1.2f' % (ethnicity_score / len(faceplusplus_res[:-1]) * 100),
         "ethnicity_score_with_fails": '%1.2f' % (ethnicity_score / (len(faceplusplus_res[:-1]) + int(faceplusplus_res[-1][0])) * 100),
+        "age_score": '%1.2f' % age_score
     }
     
 

@@ -1,6 +1,6 @@
+import time
 from scraping.page_scraper import PageScraper
 from selenium import webdriver
-import time
 
 pages = [
     # Main page where services are listed
@@ -17,7 +17,7 @@ class CensusScraper:
 
     def __init__(self):
         self.scraper = PageScraper(pages, "https://factfinder.census.gov/faces/nav/jsf/pages/community_facts.xhtml")
-        self.scraper.changeCurrentPage("census_finder")
+        self.scraper.change_current_page("census_finder")
         time.sleep(3)
 
     # Click on Element
@@ -28,8 +28,8 @@ class CensusScraper:
     def show_all_tab(self, postcode_list):
 
         # Search bar and button for postcode
-        search = self.scraper.findElements(["search_bar"])[0]
-        search_button = self.scraper.findElements(["search_button"])[0]
+        search = self.scraper.find_elements(["search_bar"])[0]
+        search_button = self.scraper.find_elements(["search_button"])[0]
         time.sleep(3)
 
         # Click on show all measures
@@ -79,16 +79,16 @@ class CensusScraper:
         return postcode_info
 
     # Second part, unemployment rate
-    def income_tab(self, postcode_info):
+    def income_tab(self, postcode_list):
 
         # Click on Income tab
         self.safe_element_click(self.scraper.driver.find_element_by_xpath("//a[contains(text(), 'Income')]"))
-
-        for postcode in list(postcode_info.keys()):
+        postcode_dict = {}
+        for i, postcode in enumerate(list(postcode_list)):
             time.sleep(2)
             # Search bar and button for postcode
-            search = self.scraper.findElements(["search_bar"])[0]
-            search_button = self.scraper.findElements(["search_button"])[0]
+            search = self.scraper.find_elements(["search_bar"])[0]
+            search_button = self.scraper.find_elements(["search_button"])[0]
             time.sleep(3)
 
             # Send postcode and click go
@@ -108,7 +108,7 @@ class CensusScraper:
                     2].text.replace(
                     "%", "")
             except Exception:
-                del postcode_info[str(postcode)]
+                del postcode_list[i]
                 print("Reject:-- " + str(postcode))
                 self.scraper.driver.back()
                 continue
@@ -117,29 +117,29 @@ class CensusScraper:
             try:
                 float(unemployment_rate)
             except ValueError:
-                del postcode_info[str(postcode)]
+                del postcode_list[i]
                 print ("Reject: " + str(postcode))
                 self.scraper.driver.back()
                 continue
 
-            postcode_info[str(postcode)]["unemployment_rate"] = unemployment_rate
-            print(postcode_info[str(postcode)]["unemployment_rate"])
+            postcode_dict[str(postcode)] = unemployment_rate
+            print(postcode_dict[str(postcode)])
             self.scraper.driver.back()
 
         time.sleep(3)
-        return postcode_info
+        return postcode_dict
 
     # Third part, homeownership rate
-    def housing_tab(self, postcode_info):
+    def housing_tab(self, postcode_list):
 
         # Click on Housing tab
         self.safe_element_click(self.scraper.driver.find_element_by_xpath("//a[contains(text(), 'Housing')]"))
-
-        for postcode in list(postcode_info.keys()):
+        postcode_dict = {}
+        for i, postcode in enumerate(list(postcode_list)):
             time.sleep(2)
             # Search bar and button for postcode
-            search = self.scraper.findElements(["search_bar"])[0]
-            search_button = self.scraper.findElements(["search_button"])[0]
+            search = self.scraper.find_elements(["search_bar"])[0]
+            search_button = self.scraper.find_elements(["search_button"])[0]
             time.sleep(3)
 
             # Send postcode and click go
@@ -162,29 +162,29 @@ class CensusScraper:
             try:
                 float(ownership_rate)
             except ValueError:
-                del postcode_info[str(postcode)]
+                del postcode_list[i]
                 print ("Reject: " + str(postcode))
                 self.scraper.driver.back()
                 continue
 
-            postcode_info[str(postcode)]["ownership_rate"] = ownership_rate
-            print(postcode_info[str(postcode)]["ownership_rate"])
+            postcode_dict[str(postcode)] = ownership_rate
+            print(postcode_dict[str(postcode)])
             self.scraper.driver.back()
 
         time.sleep(3)
-        return postcode_info
+        return postcode_dict
 
     # Fourth part, median rent
-    def housing_tab2(self, postcode_info):
+    def housing_tab2(self, postcode_list):
 
         # Click on Housing tab
         self.safe_element_click(self.scraper.driver.find_element_by_xpath("//a[contains(text(), 'Housing')]"))
-
-        for postcode in list(postcode_info.keys()):
+        postcode_dict = {}
+        for i, postcode in enumerate(list(postcode_list)):
             time.sleep(2)
             # Search bar and button for postcode
-            search = self.scraper.findElements(["search_bar"])[0]
-            search_button = self.scraper.findElements(["search_button"])[0]
+            search = self.scraper.find_elements(["search_bar"])[0]
+            search_button = self.scraper.find_elements(["search_button"])[0]
             time.sleep(3)
 
             # Send postcode and click go
@@ -207,14 +207,14 @@ class CensusScraper:
             try:
                 float(median_rent)
             except ValueError:
-                del postcode_info[str(postcode)]
+                del postcode_list[i]
                 print ("Reject: " + str(postcode))
                 self.scraper.driver.back()
                 continue
 
-            postcode_info[str(postcode)]["median_rent"] = median_rent
-            print(postcode_info[str(postcode)]["median_rent"])
+            postcode_dict[str(postcode)] = median_rent
+            print(postcode_dict[str(postcode)])
             self.scraper.driver.back()
 
         time.sleep(3)
-        return postcode_info
+        return postcode_dict

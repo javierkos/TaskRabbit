@@ -64,11 +64,16 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
-analysis/dataframes/*
-analysis/dataframes/new_york/*
-analysis/dataframes/los_angeles/*
-analysis/dataframes/san_francisco/*
-analysis/image_recon/test_datasets/*
-#databases/*
-scraping/demographic_data/data/*
+analysis/dataframes/*/*
+analysis/map_boundaries/*/*
+analysis/image_recon/test_datasets/UTKFace/*
+analysis/image_recon/test_datasets/UTK_df.pkl
+analysis/plots/heat_maps/*
+analysis/plots/histograms/*
+analysis/plots/vehicle_analysis/*/*
 
+databases/*
+scraping/demographic_data/data/*/*
+scraping/demographic_data/*/data/*
+jupyter_notebooks/.ipynb_checkpoints
+analysis/image_recon/results/*

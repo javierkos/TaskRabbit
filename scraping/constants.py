@@ -1,1 +1,0 @@
-DB_NAME = "taskrabbit_oklahoma.db"

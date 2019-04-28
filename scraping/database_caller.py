@@ -79,7 +79,7 @@ class DatabaseCaller:
         
         return max_id
 
-    def storeReviews(self, reviews):
+    def store_reviews(self, reviews):
         self.c.executemany('INSERT INTO reviews(text, date, rating, tasker_id, service_title) values (?,?,?,?,?)', reviews)
         self.conn.commit()
 
@@ -95,16 +95,16 @@ class DatabaseCaller:
         self.c.executemany('INSERT INTO descriptions(text,service_id,tasker_id) values (?,?,?)', description)
         self.conn.commit()
 
-    def storePriceDetails(self, price_details):
+    def store_price_details(self, price_details):
         self.c.executemany('INSERT INTO price_details(amount,currency,basis,tasker_id,service_id) values (?,?,?,?,?)', price_details)
         self.conn.commit()
 
-    def storeCompletedTasks(self, completed_tasks):
+    def store_completed_tasks(self, completed_tasks):
         self.c.executemany('INSERT INTO completed_tasks(tasker_id,service_id,completed) values (?,?,?)', completed_tasks)
         self.conn.commit()
 
     # Get locations for a city
-    def getLocations(self, city):
+    def get_locations(self, city):
         locations = {city: []}
         self.c.execute(
             "SELECT locations.location_id,locations.name FROM locations,cities WHERE locations.city_id = cities.city_id AND cities.name = '" + city + "';")
@@ -113,7 +113,7 @@ class DatabaseCaller:
         return locations
 
     # Get services
-    def getServices(self):
+    def get_services(self):
         services = []
         self.c.execute("SELECT service_id,name,url FROM services;")
         for row in self.c:

@@ -1,17 +1,6 @@
-from scraping.page_scraper import PageScraper
 import sqlite3
 import sys
-from multiprocessing import Pool, cpu_count
-import requests
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.keys import Keys
+from multiprocessing import Pool
 from selenium import webdriver
 import time
 
@@ -84,6 +73,7 @@ if __name__ == '__main__':
 
     split_taskers = list(split_seq(non_reviewed_taskers, num_threads))
     print ("Scraping reviews in " + str(num_threads) + " batches...")
+    print (split_taskers)
     with Pool(num_threads) as p:
         [p.apply_async(scrape_reviews, args=[tasker_list, sys.argv[1]]) for tasker_list in split_taskers]
         p.close()

@@ -1,4 +1,0 @@
-selenium
-rejson
-matplotlib==3.0
-pandas

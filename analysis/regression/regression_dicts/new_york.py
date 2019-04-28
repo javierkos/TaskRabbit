@@ -2,6 +2,7 @@ default_init_steps = {
     "load": None,
     "store_map": None,
     "init": None,
+    "overall_data": None,
 }
 
 service_steps = {
@@ -10,112 +11,83 @@ service_steps = {
         "vif": {
             "threshold": 10
         },
-        "leave": ["Pop. density", "Homeownership rate", "Median rent"],
-        "fit": None,
-        "plots": None
+        "all_subsets": None,
     },
     "Assemble Furniture": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ["Homeownership rate", "Percent. foreign born"],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Electrical Work": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Percent. foreign born', 'Unemployment rate'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Plumbing": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Percent. foreign born', 'Highschool'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Bartending": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Homeownership rate', 'Per. white'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "General Cleaning": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Percent. foreign born', 'Unemployment rate', 'Median rent'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "General Handyman": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Per. white'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Heavy Lifting": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Homeownership rate', 'Pop. density', 'Unemployment rate'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Help Cooking & Serving Food": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Homeownership rate', 'Percent. foreign born', 'Median rent'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Painting": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Unemployment rate'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Personal Assistant": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Homeownership rate', 'Percent. foreign born', 'Median rent'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     },
     "Yard Work & Removal": {
         "scale": "standard",
         "vif": {
             "threshold": 10
         },
-        "leave": ['Homeownership rate', 'Percent. foreign born', 'Median rent'],
-        "fit": None  # Fit linear regression model
+        "all_subsets": None,
     }
 }
-
-'''plumbing, electrical, assemble furn, bartending, handyman, heavy lifting, painting, personal, yard work
-"vif": {  # Calculate VIF and remove variables over threshold of 10
-    "threshold": 10,
-    "keep": ['Unemployment rate'] #Sentiment here is good
-},
-'''
-'''
-        "leave": ['Pop. density', 'Homeownership rate', 'Median household income'],
-        "scale": None,  # Scale/standardise
-        "fit": None  # Fit linear regression model
-        
-        "leave": ['Homeownership rate', 'Percent. foreign born'],
-        "scale": None,
-        "fit": None
-'''

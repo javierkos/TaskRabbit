@@ -14,6 +14,7 @@ import pickle
 class DataPreparation:
 
     def plot_heatmap(self, df, service_name, type='kendall', save=True):
+        '''
         fig1, ax1 = plt.subplots()
         fig1.set_size_inches(16, 12)
         plt.title("Correlation between variables for New York boroughs on " + service_name + " service")
@@ -22,6 +23,7 @@ class DataPreparation:
                     xticklabels=df.corr(type).columns.values,
                     yticklabels=df.corr(type).columns.values)
         plt.savefig("../plots/heat_maps/" + service_name + ".png") if save else plt.show()
+        '''
 
     def plot_histogram(self, column, column_name, save=True):
         fig1, ax1 = plt.subplots()
@@ -94,7 +96,11 @@ class DataPreparation:
         X = X_data.drop('Median service cost', 1)
         return X, y
 
-    def data_load(self, location, service):
+    def data_load(self, location, service, relative=False):
         # Read dataframe for service
-        with open("../dataframes/" + location + "/" + service + ".pkl", 'rb') as f:
-            return pickle.load(f)
+        if relative:
+            with open("dataframes/" + location + "/" + service + ".pkl", 'rb') as f:
+                return pickle.load(f)
+        else:
+            with open("../dataframes/" + location + "/" + service + ".pkl", 'rb') as f:
+                return pickle.load(f)

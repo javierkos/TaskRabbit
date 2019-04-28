@@ -9,7 +9,6 @@ from matplotlib import rcParams
 import pickle
 #import seaborn as sns
 import statistics
-from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 '''
     Takes in two params:
     1st - name (key) of city
@@ -29,7 +28,6 @@ def produce_dataframes(city_key, db_name, store=True):
     }
     services = [1, 2, 3, 4, 6, 7, 8, 29, 30, 35, 51, 52]
     i = 0
-    sia = SIA()
     for service in services:
         print(i)
 
@@ -45,19 +43,8 @@ def produce_dataframes(city_key, db_name, store=True):
         }
         for row in c:
             if not row[0] in locations.keys():
-                c2.execute(
-                    "SELECT descriptions.text FROM price_details INNER JOIN services ON price_details.service_id = services.service_id INNER JOIN taskers ON price_details.tasker_id = taskers.tasker_id INNER JOIN tasker_locations ON taskers.tasker_id = tasker_locations.tasker_id INNER JOIN descriptions ON taskers.tasker_id = descriptions.tasker_id WHERE services.service_id = " + str(
-                        service) + " AND tasker_locations.location_id = " + str(
-                        row[0]) + " AND descriptions.service_id = " + str(service) + "")
-
-                sentiments = []
-                tot_sentiment = 0
-                for desc in c2:
-                    sentiments.append(sia.polarity_scores(desc[0])['compound'])
-
                 locations[row[0]] = {}
                 locations[row[0]]["costs"] = []
-                locations[row[0]]['av. desc. sentiment'] = statistics.mean(sentiments)
                 locations[row[0]]["pop_density"] = row[2]
                 locations[row[0]]["median_age"] = row[3]
                 locations[row[0]]["percent_highschool_plus"] = row[4]
@@ -71,7 +58,6 @@ def produce_dataframes(city_key, db_name, store=True):
                 locations[row[0]]["median_rent"] = row[12]
             locations[row[0]]["costs"] = locations[row[0]]["costs"] + [row[16]]
 
-
         pop_density = []
         median_age = []
         percent_highschool_plus = []
@@ -81,7 +67,6 @@ def produce_dataframes(city_key, db_name, store=True):
         percent_below_poverty = []
         crime = []
         per_white = []
-        sentiment = []
         unemployment = []
         median_rent = []
         cost = []
@@ -99,7 +84,6 @@ def produce_dataframes(city_key, db_name, store=True):
             per_white.append(locations[location]["per_white"])
             unemployment.append(locations[location]["unemployment"])
             median_rent.append(locations[location]["median_rent"])
-            sentiment.append(locations[location]['av. desc. sentiment'])
             cost.append(statistics.median(locations[location]["costs"]))
 
         vars = []
@@ -117,7 +101,7 @@ def produce_dataframes(city_key, db_name, store=True):
         # plt.show()
 
         df = pd.DataFrame({'Pop. density': pop_density,
-                           # 'Median age': median_age,
+                           'Median age': median_age,
                            'Highschool': percent_highschool_plus,
                            'Homeownership rate': housing_units,
                            'Median household income': median_household_income,
@@ -127,7 +111,6 @@ def produce_dataframes(city_key, db_name, store=True):
                            'Per. white': per_white,
                            'Unemployment rate': unemployment,
                            'Median rent': median_rent,
-                           'Av. desc. sentiment': sentiment,
                            'Median service cost': cost})
 
         i += 1
@@ -139,3 +122,6 @@ def produce_dataframes(city_key, db_name, store=True):
                 pickle.dump(dfs[service], output_file)
     else:
         return dfs
+
+if __name__ == '__main__':
+    produce_dataframes(sys.argv[1], sys.argv[2])

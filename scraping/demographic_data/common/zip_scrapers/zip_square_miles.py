@@ -16,7 +16,7 @@ class ZIPMilesScraper:
 
     def __init__(self):
         self.scraper = PageScraper(pages, "https://www.uszip.com")
-        self.scraper.changeCurrentPage("zip_search_page")
+        self.scraper.change_current_page("zip_search_page")
 
     # Returns a dictionary
     def get_zips_landarea(self, zips):
@@ -24,8 +24,8 @@ class ZIPMilesScraper:
         zip_areas = {}
         for zip in zips:
             # Find search means
-            self.search_bar = self.scraper.findElements(["search_bar"])[0]
-            self.search_button = self.scraper.findElements(["search_button"])[0]
+            self.search_bar = self.scraper.find_elements(["search_bar"])[0]
+            self.search_button = self.scraper.find_elements(["search_button"])[0]
 
             # Search
             self.search_bar.clear()

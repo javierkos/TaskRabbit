@@ -1,14 +1,10 @@
 import requests
 import json
 import time
+from analysis.image_recon.constants import *
 
 class ImageTestService:
-    def __init__(self, service, X):
-        service_endpoints = {
-            "slightcorp_face": "https://face-api.sightcorp.com/",
-        }
-
-        self.service, self.service_endpoint = service, service_endpoints[service]
+    def __init__(self, X):
         self.X = X
 
     def get_accuracy(self, y, pred):
@@ -29,10 +25,10 @@ class ImageTestService:
         results = []
         fails, i = 0, 0
         for index, row in self.X.iterrows():
-            if i % 25 == 0:
+            if i % 25 == 0:           
                 print (i)
-            json_resp = requests.post('https://api-face.sightcorp.com/api/detect/',
-                                      data={'app_key': 'df749b63256e45e39059faa0c4f6887a', 'ethnicity': True},
+            json_resp = requests.post(SLCORP_ENDPOINT,
+                                      data={'app_key': SLCOPR_KEY, 'ethnicity': True},
                                       files={'img': ('filename', open('test_datasets/UTKFace/' + row["f_name"], 'rb'))})
 
             json_obj = json.loads(json_resp.text)
@@ -62,9 +58,9 @@ class ImageTestService:
         for index, row in self.X.iterrows():
             if i % 25 == 0:
                 print (i)
-            json_resp = requests.post('https://api-us.faceplusplus.com/facepp/v3/detect',
-                                      data={'api_key': 'p2Xus5m7q7pDON-gris92aU-T14Mqyfs',
-                                            'api_secret': "CnQzPyBY5yKJkkHeEEl4Si-2KNzx7yf0",
+            json_resp = requests.post(FACE_PLUSPLUS_ENDPOINT,
+                                      data={'api_key': FACE_PLUSPLUS_KEY,
+                                            'api_secret': FACE_PLUSPLUS_SECRET,
                                             'return_attributes': "gender,age,smiling,ethnicity"},
                                       files={'image_file': ('filename', open('test_datasets/UTKFace/' + row["f_name"], 'rb'))})
             json_obj = json.loads(json_resp.text)

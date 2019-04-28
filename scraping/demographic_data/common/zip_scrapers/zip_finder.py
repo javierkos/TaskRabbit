@@ -15,15 +15,15 @@ class ZipScraper:
         url_map = {
             "los angeles": "Los-Angeles-California",
             "san francisco": "San-Francisco-California",
-            "new_york": "New-York-New-York",
+            "new york": "New-York-New-York",
             "oklahoma": "Oklahoma-City-Oklahoma"
         }
         self.scraper = PageScraper(pages, "http://www.city-data.com/zipmaps/" + url_map[city_name] + ".html")
-        self.scraper.changeCurrentPage("city_data_search")
+        self.scraper.change_current_page("city_data_search")
 
     # Returns a list
     def scrape_zips(self):
-        zips = self.scraper.findElements(["zips"])
+        zips = self.scraper.find_elements(["zips"])
 
         # Return postcode list
         return [zip.text for zip in zips]
